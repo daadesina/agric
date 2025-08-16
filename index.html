@@ -1,83 +1,689 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agritech MVP</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgroLink – Social & Professional Network for Agriculture</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    // Tailwind config
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+          colors: {
+            brand: {
+              50: '#effdf5',
+              100: '#d9fbe8',
+              200: '#b4f6d3',
+              300: '#7cedb5',
+              400: '#3fdf92',
+              500: '#16c47f',
+              600: '#0e9c67',
+              700: '#0d7a54',
+              800: '#0e6146',
+              900: '#0d503b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body { height: 100%; }
+    .scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  </style>
 </head>
-<body class="bg-gray-50 font-sans">
-
-  <!-- Navbar -->
-  <!-- Navbar -->
-    <nav class="bg-green-600 text-white px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">AgriConnect</h1>
-
-    <!-- Desktop Menu -->
-    <div class="hidden md:flex space-x-6">
-        <a href="index.html" class="hover:underline">Home</a>
-        <a href="marketplace.html" class="hover:underline">Marketplace</a>
-        <a href="advisory.html" class="hover:underline">Advisory</a>
-        <a href="education.html" class="hover:underline">Education</a>
-        <a href="login.html" class="hover:underline">Login</a>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100">
+  <!-- Top nav -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-2xl bg-brand-500 flex items-center justify-center text-white font-black">Ag</div>
+          <div class="text-xl font-bold">AgroLink</div>
+          <span id="betaBadge" class="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">MVP</span>
+        </div>
+        <div class="hidden md:flex items-center gap-2">
+          <div class="relative">
+            <input id="globalSearch" type="search" placeholder="Search people, posts, products..." class="w-80 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400" />
+            <button id="globalSearchBtn" class="absolute right-1 top-1.5 px-3 py-1 rounded-lg bg-brand-500 text-white text-sm">Search</button>
+          </div>
+          <button id="createBtn" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white">Create</button>
+          <button id="darkToggle" class="px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700">🌙</button>
+          <div id="currentUserPill" class="ml-2 px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm"></div>
+        </div>
+        <button id="mobileMenuBtn" class="md:hidden inline-flex items-center p-2 rounded-lg border border-slate-300 dark:border-slate-700">☰</button>
+      </div>
     </div>
 
-    <!-- Mobile Menu Button -->
-    <button id="menu-btn" class="md:hidden focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" 
-            viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-    </button>
+    <!-- Tabs -->
+    <nav class="border-t border-slate-200 dark:border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto scrollbar-thin">
+        <ul id="tabs" class="flex gap-2 py-2 text-sm">
+          <li><button data-tab="feed" class="tab active px-3 py-1.5 rounded-full bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900">Feed</button></li>
+          <li><button data-tab="market" class="tab px-3 py-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">Marketplace</button></li>
+          <li><button data-tab="experts" class="tab px-3 py-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">Experts</button></li>
+          <li><button data-tab="funding" class="tab px-3 py-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">Funding</button></li>
+          <li><button data-tab="courses" class="tab px-3 py-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">Courses</button></li>
+          <li><button data-tab="profile" class="tab px-3 py-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">Profile</button></li>
+          <li class="ml-auto hidden md:block"><button id="authBtn" class="px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-700">Sign In / Up</button></li>
+        </ul>
+      </div>
     </nav>
+  </header>
 
-    <!-- Mobile Menu (Hidden by Default) -->
-    <div id="menu" class="hidden md:hidden bg-green-700 text-white px-6 py-4 space-y-4">
-    <a href="index.html" class="block hover:underline">Home</a>
-    <a href="marketplace.html" class="block hover:underline">Marketplace</a>
-    <a href="advisory.html" class="block hover:underline">Advisory</a>
-    <a href="education.html" class="block hover:underline">Education</a>
-    <a href="login.html" class="block hover:underline">Login</a>
+  <!-- Main content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- FEED -->
+    <section id="view-feed" class="view grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-4">
+        <!-- Create Post Card -->
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <div class="flex gap-3">
+            <img id="composerAvatar" class="h-10 w-10 rounded-full" src="https://api.dicebear.com/9.x/identicon/svg?seed=AgroUser" alt="avatar"/>
+            <div class="flex-1">
+              <textarea id="postText" rows="2" class="w-full resize-none rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-3" placeholder="Share your farm update, challenge, or need..."></textarea>
+              <div class="mt-2 flex flex-wrap items-center gap-2">
+                <select id="postCategory" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm">
+                  <option value="general">General</option>
+                  <option value="crops">Crops</option>
+                  <option value="livestock">Livestock</option>
+                  <option value="inputs">Inputs</option>
+                  <option value="security">Security</option>
+                </select>
+                <input id="postImage" type="url" placeholder="Image URL (optional)" class="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" />
+                <button id="publishPost" class="ml-auto px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white">Post</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Feed list -->
+        <div id="feedList" class="space-y-4"></div>
+      </div>
+      <aside class="space-y-4">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="font-semibold mb-2">Trending Hashtags</h3>
+          <div id="trending" class="flex flex-wrap gap-2 text-sm"></div>
+        </div>
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="font-semibold mb-2">Suggested Experts</h3>
+          <div id="suggestedExperts" class="space-y-2"></div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- MARKETPLACE -->
+    <section id="view-market" class="view hidden">
+      <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-4">
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="marketType" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm">
+            <option value="all">All</option>
+            <option value="crops">Crops</option>
+            <option value="livestock">Livestock</option>
+            <option value="inputs">Inputs</option>
+          </select>
+          <input id="marketSearch" class="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Search maize, broilers, feed, fertilizer..."/>
+          <button id="addListingBtn" class="px-4 py-2 rounded-xl bg-brand-600 text-white">Add Listing</button>
+        </div>
+      </div>
+      <div id="marketGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- EXPERTS -->
+    <section id="view-experts" class="view hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="lg:col-span-2">
+          <div id="expertsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        </div>
+        <aside>
+          <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+            <h3 class="font-semibold mb-2">Book a Session</h3>
+            <form id="bookingForm" class="space-y-2">
+              <input id="bookingName" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Your name" required>
+              <select id="bookingExpert" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm"></select>
+              <input id="bookingDate" type="date" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" required>
+              <textarea id="bookingNote" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Brief issue description"></textarea>
+              <button class="w-full px-4 py-2 rounded-xl bg-brand-600 text-white" type="submit">Request Booking</button>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FUNDING -->
+    <section id="view-funding" class="view hidden">
+      <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <form id="campaignForm" class="lg:col-span-1 space-y-2">
+            <h3 class="font-semibold">Create Campaign</h3>
+            <input id="campTitle" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Title (e.g., 2-acre maize farm)">
+            <input id="campAmount" type="number" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Target Amount (GHS)">
+            <textarea id="campDesc" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Brief description and plan"></textarea>
+            <button class="w-full px-4 py-2 rounded-xl bg-brand-600 text-white" type="submit">Publish</button>
+          </form>
+          <div class="lg:col-span-2">
+            <div id="campaignGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COURSES -->
+    <section id="view-courses" class="view hidden">
+      <div id="coursesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="view-profile" class="view hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-1 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <div class="flex items-center gap-3">
+            <img id="profileAvatar" class="h-16 w-16 rounded-full" src="https://api.dicebear.com/9.x/identicon/svg?seed=Profile" alt="avatar"/>
+            <div>
+              <h3 id="profileName" class="text-lg font-semibold">Guest</h3>
+              <p id="profileRole" class="text-sm text-slate-500 dark:text-slate-400">Role: -</p>
+            </div>
+          </div>
+          <div class="mt-4 space-y-2 text-sm">
+            <div class="flex justify-between"><span>Posts</span><span id="statPosts">0</span></div>
+            <div class="flex justify-between"><span>Listings</span><span id="statListings">0</span></div>
+            <div class="flex justify-between"><span>Courses</span><span id="statCourses">0</span></div>
+          </div>
+        </div>
+        <div class="lg:col-span-2 space-y-4">
+          <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+            <h3 class="font-semibold mb-2">Your Posts</h3>
+            <div id="profilePosts" class="space-y-3"></div>
+          </div>
+          <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+            <h3 class="font-semibold mb-2">Your Listings</h3>
+            <div id="profileListings" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modals -->
+  <div id="modalBackdrop" class="hidden fixed inset-0 bg-black/40 z-50"></div>
+
+  <!-- Auth Modal -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 grid place-items-center p-4">
+    <div class="w-full max-w-md rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold">Sign In / Create Account</h3>
+        <button data-close class="text-slate-500">✕</button>
+      </div>
+      <form id="authForm" class="space-y-3">
+        <input id="authName" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Full name" required>
+        <select id="authRole" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" required>
+          <option value="farmer">Farmer</option>
+          <option value="buyer">Buyer / Retailer</option>
+          <option value="investor">Investor</option>
+          <option value="vet">Veterinary Doctor</option>
+          <option value="pathologist">Plant Pathologist</option>
+          <option value="supplier">Input Supplier</option>
+        </select>
+        <button class="w-full px-4 py-2 rounded-xl bg-brand-600 text-white" type="submit">Continue</button>
+      </form>
     </div>
+  </div>
 
-    <script>
-    // Toggle mobile menu
-    const btn = document.getElementById('menu-btn');
-    const menu = document.getElementById('menu');
-    btn.addEventListener('click', () => {
-        menu.classList.toggle('hidden');
-    });
-    </script>
-
-
-  <!-- Hero Section -->
-  <section class="text-center py-20 bg-gradient-to-r from-green-600 to-green-800 text-white">
-    <h2 class="text-4xl font-bold mb-4">Bridging Farmers, Buyers & Experts</h2>
-    <p class="mb-6 text-lg">Buy, Sell, Learn, and Connect with Agriculture Professionals</p>
-    <a href="signup.html" class="bg-white text-green-700 px-6 py-3 rounded-lg font-semibold">Get Started</a>
-  </section>
-
-  <!-- Features -->
-  <section class="py-16 px-8 grid md:grid-cols-3 gap-6">
-    <div class="p-6 shadow-lg rounded-lg bg-white">
-      <h3 class="font-bold text-xl mb-2">Farm-to-Market</h3>
-      <p>Farmers showcase crops & livestock, buyers connect instantly.</p>
+  <!-- Listing Modal -->
+  <div id="listingModal" class="hidden fixed inset-0 z-50 grid place-items-center p-4">
+    <div class="w-full max-w-lg rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold">New Listing</h3>
+        <button data-close class="text-slate-500">✕</button>
+      </div>
+      <form id="listingForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <input id="listTitle" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Title (e.g., 100 crates of eggs)" required>
+        <select id="listType" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" required>
+          <option value="crops">Crops</option>
+          <option value="livestock">Livestock</option>
+          <option value="inputs">Inputs</option>
+        </select>
+        <input id="listPrice" type="number" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Price (GHS)" required>
+        <input id="listImage" type="url" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Image URL (optional)">
+        <textarea id="listDesc" class="sm:col-span-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Description" required></textarea>
+        <button class="sm:col-span-2 px-4 py-2 rounded-xl bg-brand-600 text-white" type="submit">Publish Listing</button>
+      </form>
     </div>
-    <div class="p-6 shadow-lg rounded-lg bg-white">
-      <h3 class="font-bold text-xl mb-2">Smart Advisory</h3>
-      <p>Consult plant pathologists & veterinary doctors with ease.</p>
-    </div>
-    <div class="p-6 shadow-lg rounded-lg bg-white">
-      <h3 class="font-bold text-xl mb-2">Education Hub</h3>
-      <p>Access short agricultural courses and earn certificates.</p>
-    </div>
-  </section>
+  </div>
 
-  <!-- Footer -->
-  <footer class="bg-green-700 text-white py-6 text-center">
-    <p>&copy; 2025 AgriConnect. All Rights Reserved.</p>
+  <!-- Toast -->
+  <div id="toast" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-xl bg-slate-900 text-white text-sm"></div>
+
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-500 dark:text-slate-400">
+      Built as an MVP for CTVET pitching • © <span id="year"></span> AgroLink
+    </div>
   </footer>
 
+  <script>
+    // ----- Simple State & Storage -----
+    const store = {
+      currentUser: JSON.parse(localStorage.getItem('agro_user') || 'null'),
+      posts: JSON.parse(localStorage.getItem('agro_posts') || '[]'),
+      listings: JSON.parse(localStorage.getItem('agro_listings') || '[]'),
+      experts: [
+        { id: 'e1', name: 'Dr. Amina K.', role: 'Veterinary Doctor', bio: 'Poultry & ruminant health specialist', rating: 4.8 },
+        { id: 'e2', name: 'Engr. Tunde O.', role: 'Plant Pathologist', bio: 'Maize & cassava disease control', rating: 4.7 },
+        { id: 'e3', name: 'Dr. Mensah Q.', role: 'Veterinary Doctor', bio: 'Vaccination schedules & breeding', rating: 4.6 },
+        { id: 'e4', name: 'Dr. Adaeze N.', role: 'Plant Pathologist', bio: 'IPM & harvest optimization', rating: 4.9 },
+      ],
+      campaigns: JSON.parse(localStorage.getItem('agro_campaigns') || '[]'),
+      courses: [
+        { id: 'c1', title: 'Practical Poultry Management (4 weeks)', level: 'Beginner', desc: 'Feeding schedules, biosecurity, vaccination & record keeping.' },
+        { id: 'c2', title: 'Maize Production & IPM (6 weeks)', level: 'Intermediate', desc: 'Soil prep, planting windows, pest/disease control.' },
+        { id: 'c3', title: 'Agribusiness & Farm Economics (4 weeks)', level: 'All levels', desc: 'Pricing, budgeting, credit, profit planning.' },
+      ],
+      enrollments: JSON.parse(localStorage.getItem('agro_enrollments') || '[]')
+    }
+
+    function save() {
+      localStorage.setItem('agro_user', JSON.stringify(store.currentUser));
+      localStorage.setItem('agro_posts', JSON.stringify(store.posts));
+      localStorage.setItem('agro_listings', JSON.stringify(store.listings));
+      localStorage.setItem('agro_campaigns', JSON.stringify(store.campaigns));
+      localStorage.setItem('agro_enrollments', JSON.stringify(store.enrollments));
+    }
+
+    // ----- Utilities -----
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+    const uid = () => Math.random().toString(36).slice(2,9);
+    const now = () => new Date().toISOString();
+    const fmt = (iso) => new Date(iso).toLocaleString();
+
+    function toast(msg) {
+      const t = $('#toast');
+      t.textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 2000);
+    }
+
+    // ----- Theme -----
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (localStorage.getItem('agro_dark') === 'true' || (!localStorage.getItem('agro_dark') && prefersDark)) {
+      document.documentElement.classList.add('dark');
+    }
+
+    $('#darkToggle').addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const enabled = document.documentElement.classList.contains('dark');
+      localStorage.setItem('agro_dark', enabled);
+    });
+
+    // ----- Tabs Navigation -----
+    $$('#tabs .tab').forEach(btn => btn.addEventListener('click', () => {
+      $$('#tabs .tab').forEach(b => b.classList.remove('active','bg-slate-900','text-white','dark:bg-slate-100','dark:text-slate-900'));
+      btn.classList.add('active','bg-slate-900','text-white','dark:bg-slate-100','dark:text-slate-900');
+      const tab = btn.dataset.tab;
+      $$('.view').forEach(v => v.classList.add('hidden'));
+      $('#view-' + tab).classList.remove('hidden');
+      if (tab === 'profile') renderProfile();
+    }));
+
+    // ----- Auth -----
+    function updateUserUI() {
+      const pill = $('#currentUserPill');
+      pill.textContent = store.currentUser ? `${store.currentUser.name} • ${store.currentUser.role}` : 'Guest';
+      $('#profileName').textContent = store.currentUser ? store.currentUser.name : 'Guest';
+      $('#profileRole').textContent = 'Role: ' + (store.currentUser ? store.currentUser.role : '-');
+    }
+
+    function openModal(id) {
+      $('#modalBackdrop').classList.remove('hidden');
+      $(id).classList.remove('hidden');
+    }
+    function closeModals() {
+      $('#modalBackdrop').classList.add('hidden');
+      $$('#authModal, #listingModal').forEach(m => m.classList.add('hidden'));
+    }
+
+    $('#authBtn').addEventListener('click', () => openModal('#authModal'));
+    $$('#authModal [data-close], #listingModal [data-close], #modalBackdrop').forEach(b => b.addEventListener('click', closeModals));
+
+    $('#authForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = $('#authName').value.trim();
+      const role = $('#authRole').value;
+      if (!name) return;
+      store.currentUser = { id: uid(), name, role };
+      save();
+      updateUserUI();
+      closeModals();
+      toast('Signed in as ' + name);
+    });
+
+    // ----- Feed -----
+    function renderFeed() {
+      const list = $('#feedList');
+      list.innerHTML = '';
+      const posts = [...store.posts].sort((a,b) => b.created.localeCompare(a.created));
+      posts.forEach(p => list.appendChild(feedItem(p)));
+      renderTrending(posts);
+      renderSuggestedExperts();
+    }
+
+    function feedItem(p) {
+      const card = document.createElement('article');
+      card.className = 'rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4';
+      card.innerHTML = `
+        <div class="flex items-center gap-3 mb-2">
+          <img class="h-10 w-10 rounded-full" src="https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(p.author)}" alt="avatar"/>
+          <div>
+            <div class="font-semibold">${p.author} <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800">${p.category}</span></div>
+            <div class="text-xs text-slate-500">${fmt(p.created)}</div>
+          </div>
+        </div>
+        <p class="mb-3 whitespace-pre-wrap">${p.text}</p>
+        ${p.image ? `<img class="w-full rounded-xl mb-3" src="${p.image}" alt="post image"/>` : ''}
+        <div class="flex items-center gap-3 text-sm">
+          <button class="like px-3 py-1 rounded-lg border border-slate-300 dark:border-slate-700">👍 <span>${p.likes||0}</span></button>
+          <button class="comment px-3 py-1 rounded-lg border border-slate-300 dark:border-slate-700">💬 <span>${p.comments?.length||0}</span></button>
+        </div>
+        <div class="mt-3 space-y-2 hidden comments">
+          <div class="space-y-2">
+            ${(p.comments||[]).map(c => `<div class='text-sm'><span class='font-semibold'>${c.author}:</span> ${c.text}</div>`).join('')}
+          </div>
+          <div class="flex gap-2">
+            <input class="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm" placeholder="Write a comment"/>
+            <button class="px-3 py-2 rounded-lg bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900">Send</button>
+          </div>
+        </div>
+      `;
+      card.querySelector('.like').addEventListener('click', () => {
+        p.likes = (p.likes||0) + 1; save(); renderFeed();
+      });
+      const commentBtn = card.querySelector('.comment');
+      const commentsBox = card.querySelector('.comments');
+      commentBtn.addEventListener('click', () => commentsBox.classList.toggle('hidden'));
+      const [input, send] = commentsBox.querySelectorAll('input, button');
+      send.addEventListener('click', () => {
+        if (!store.currentUser) return toast('Sign in to comment');
+        const text = input.value.trim();
+        if (!text) return;
+        p.comments = p.comments || [];
+        p.comments.push({ id: uid(), author: store.currentUser.name, text, created: now() });
+        input.value = ''; save(); renderFeed();
+      });
+      return card;
+    }
+
+    function renderTrending(posts) {
+      const tags = {};
+      posts.forEach(p => { tags[p.category] = (tags[p.category]||0) + 1; });
+      const sorted = Object.entries(tags).sort((a,b) => b[1]-a[1]).slice(0,6);
+      $('#trending').innerHTML = sorted.map(([k,v]) => `<span class='px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-800'>#${k} (${v})</span>`).join('') || '<span>No trends yet</span>';
+    }
+
+    function renderSuggestedExperts() {
+      const box = $('#suggestedExperts');
+      box.innerHTML = '';
+      store.experts.slice(0,3).forEach(e => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-3';
+        row.innerHTML = `
+          <img class="h-8 w-8 rounded-full" src="https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(e.name)}" alt="expert"/>
+          <div class="text-sm">
+            <div class="font-medium">${e.name}</div>
+            <div class="text-slate-500">${e.role} • ⭐ ${e.rating}</div>
+          </div>`;
+        box.appendChild(row);
+      });
+    }
+
+    $('#publishPost').addEventListener('click', () => {
+      if (!store.currentUser) return toast('Sign in to post');
+      const text = $('#postText').value.trim();
+      if (!text) return toast('Write something first');
+      const category = $('#postCategory').value;
+      const image = $('#postImage').value.trim();
+      store.posts.push({ id: uid(), author: store.currentUser.name, category, text, image, created: now(), likes: 0, comments: [] });
+      $('#postText').value = ''; $('#postImage').value = '';
+      save(); renderFeed(); toast('Posted!');
+    });
+
+    // ----- Marketplace -----
+    function renderMarket() {
+      const grid = $('#marketGrid');
+      grid.innerHTML = '';
+      const q = $('#marketSearch').value.toLowerCase();
+      const t = $('#marketType').value;
+      const list = store.listings.filter(l => (t==='all'||l.type===t) && (l.title.toLowerCase().includes(q)||l.desc.toLowerCase().includes(q)));
+      list.sort((a,b) => b.created.localeCompare(a.created));
+      list.forEach(l => grid.appendChild(listingCard(l)));
+    }
+
+    function listingCard(l) {
+      const card = document.createElement('article');
+      card.className = 'rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4';
+      card.innerHTML = `
+        ${l.image ? `<img class='w-full h-40 object-cover rounded-xl mb-3' src='${l.image}' alt='listing'/>` : ''}
+        <h4 class='font-semibold mb-1'>${l.title}</h4>
+        <div class='text-sm text-slate-500 mb-2'>${l.type} • Posted by ${l.author}</div>
+        <p class='text-sm line-clamp-2 mb-3'>${l.desc}</p>
+        <div class='flex items-center justify-between'>
+          <span class='font-semibold'>GHS ${Number(l.price).toLocaleString()}</span>
+          <button class='px-3 py-1.5 rounded-lg bg-brand-600 text-white text-sm'>Contact Seller</button>
+        </div>
+      `;
+      card.querySelector('button').addEventListener('click', () => {
+        if (!store.currentUser) return toast('Sign in to contact seller');
+        toast('Message sent to ' + l.author);
+      });
+      return card;
+    }
+
+    $('#addListingBtn').addEventListener('click', () => {
+      if (!store.currentUser) return toast('Sign in to add listings');
+      openModal('#listingModal');
+    });
+
+    $('#listingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = $('#listTitle').value.trim();
+      const type = $('#listType').value;
+      const price = $('#listPrice').value;
+      const image = $('#listImage').value.trim();
+      const desc = $('#listDesc').value.trim();
+      if (!title || !desc) return;
+      store.listings.push({ id: uid(), author: store.currentUser.name, title, type, price, image, desc, created: now() });
+      save(); closeModals(); renderMarket(); renderProfile(); toast('Listing published');
+      e.target.reset();
+    });
+
+    $('#marketType').addEventListener('change', renderMarket);
+    $('#marketSearch').addEventListener('input', renderMarket);
+
+    // ----- Experts -----
+    function renderExperts() {
+      const grid = $('#expertsGrid');
+      grid.innerHTML = '';
+      store.experts.forEach(e => {
+        const card = document.createElement('article');
+        card.className = 'rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4';
+        card.innerHTML = `
+          <div class='flex items-center gap-3 mb-2'>
+            <img class='h-12 w-12 rounded-full' src='https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(e.name)}' alt='${e.name}'/>
+            <div>
+              <div class='font-semibold'>${e.name}</div>
+              <div class='text-sm text-slate-500'>${e.role} • ⭐ ${e.rating}</div>
+            </div>
+          </div>
+          <p class='text-sm mb-3'>${e.bio}</p>
+          <button class='px-3 py-1.5 rounded-lg bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 text-sm book'>Book</button>
+        `;
+        card.querySelector('.book').addEventListener('click', () => {
+          $('#bookingExpert').value = e.id;
+          document.querySelector('[data-tab="experts"]').click();
+          toast('Selected ' + e.name + ' for booking');
+        });
+        grid.appendChild(card);
+      });
+      // fill booking dropdown
+      $('#bookingExpert').innerHTML = store.experts.map(e => `<option value='${e.id}'>${e.name} • ${e.role}</option>`).join('');
+    }
+
+    $('#bookingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!store.currentUser) return toast('Sign in to request booking');
+      const name = $('#bookingName').value.trim();
+      const expert = store.experts.find(x => x.id === $('#bookingExpert').value);
+      const date = $('#bookingDate').value;
+      toast(`Booking requested with ${expert.name} on ${date}.`);
+      e.target.reset();
+    });
+
+    // ----- Funding -----
+    function renderCampaigns() {
+      const grid = $('#campaignGrid');
+      grid.innerHTML = '';
+      const list = [...store.campaigns].sort((a,b)=>b.created.localeCompare(a.created));
+      list.forEach(c => {
+        const pct = Math.min(100, Math.round((c.raised / c.amount) * 100) || 0);
+        const card = document.createElement('article');
+        card.className = 'rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4';
+        card.innerHTML = `
+          <h4 class='font-semibold mb-1'>${c.title}</h4>
+          <p class='text-sm mb-3'>${c.desc}</p>
+          <div class='w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mb-2'>
+            <div class='h-2 bg-brand-500' style='width:${pct}%'></div>
+          </div>
+          <div class='flex items-center justify-between text-sm mb-3'>
+            <span>Raised: GHS ${Number(c.raised).toLocaleString()}</span>
+            <span>Target: GHS ${Number(c.amount).toLocaleString()}</span>
+          </div>
+          <div class='flex items-center gap-2'>
+            <input type='number' min='1' placeholder='Amount (GHS)' class='flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm'>
+            <button class='px-3 py-1.5 rounded-lg bg-brand-600 text-white text-sm invest'>Invest</button>
+          </div>
+        `;
+        card.querySelector('.invest').addEventListener('click', () => {
+          if (!store.currentUser) return toast('Sign in to invest');
+          const amt = Number(card.querySelector('input').value || 0);
+          if (amt <= 0) return;
+          c.raised = (c.raised||0) + amt; save(); renderCampaigns(); toast('Thank you for investing!');
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    $('#campaignForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!store.currentUser) return toast('Sign in to create campaigns');
+      const title = $('#campTitle').value.trim();
+      const amount = Number($('#campAmount').value || 0);
+      const desc = $('#campDesc').value.trim();
+      if (!title || amount <= 0) return;
+      store.campaigns.push({ id: uid(), author: store.currentUser.name, title, amount, desc, created: now(), raised: 0 });
+      save(); renderCampaigns(); e.target.reset(); toast('Campaign published');
+    });
+
+    // ----- Courses -----
+    function renderCourses() {
+      const grid = $('#coursesGrid');
+      grid.innerHTML = '';
+      store.courses.forEach(c => {
+        const card = document.createElement('article');
+        const enrolled = store.enrollments.some(en => en.courseId === c.id && en.userId === store.currentUser?.id);
+        card.className = 'rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4';
+        card.innerHTML = `
+          <h4 class='font-semibold mb-1'>${c.title}</h4>
+          <div class='text-sm text-slate-500 mb-2'>Level: ${c.level}</div>
+          <p class='text-sm mb-3'>${c.desc}</p>
+          <button class='px-3 py-1.5 rounded-lg ${enrolled ? 'bg-slate-200 dark:bg-slate-800 text-slate-600' : 'bg-brand-600 text-white'} text-sm enroll'>${enrolled ? 'Enrolled' : 'Enroll'}</button>
+        `;
+        card.querySelector('.enroll').addEventListener('click', () => {
+          if (!store.currentUser) return toast('Sign in to enroll');
+          if (enrolled) return;
+          store.enrollments.push({ id: uid(), userId: store.currentUser.id, courseId: c.id, date: now() });
+          save(); renderCourses(); renderProfile(); toast('Enrolled in course');
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    // ----- Profile -----
+    function renderProfile() {
+      updateUserUI();
+      const posts = store.posts.filter(p => p.author === store.currentUser?.name);
+      const listings = store.listings.filter(l => l.author === store.currentUser?.name);
+      $('#statPosts').textContent = posts.length;
+      $('#statListings').textContent = listings.length;
+      $('#statCourses').textContent = store.enrollments.filter(e => e.userId === store.currentUser?.id).length;
+
+      const postBox = $('#profilePosts');
+      const listBox = $('#profileListings');
+      postBox.innerHTML = posts.map(p => `<div class='text-sm'><span class='font-semibold'>${fmt(p.created)}:</span> ${p.text}</div>`).join('') || '<div class="text-sm text-slate-500">No posts yet</div>';
+      listBox.innerHTML = '';
+      listings.forEach(l => listBox.appendChild(listingCard(l)));
+    }
+
+    // ----- Global Search -----
+    $('#globalSearchBtn').addEventListener('click', () => {
+      const q = $('#globalSearch').value.toLowerCase().trim();
+      if (!q) return renderFeed();
+      const results = store.posts.filter(p => p.text.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+      const list = $('#feedList'); list.innerHTML = '';
+      results.forEach(p => list.appendChild(feedItem(p)));
+      toast(`${results.length} post(s) found`);
+      document.querySelector('[data-tab="feed"]').click();
+    });
+
+    // ----- Create FAB (quick actions) -----
+    $('#createBtn').addEventListener('click', () => {
+      const active = document.querySelector('#tabs .tab.active')?.dataset.tab;
+      if (active === 'market') {
+        if (!store.currentUser) return toast('Sign in to add listings');
+        openModal('#listingModal');
+      } else if (active === 'funding') {
+        $('#campTitle').focus();
+      } else if (active === 'feed') {
+        $('#postText').focus();
+      }
+    });
+
+    // ----- Demo Seed (only first load) -----
+    if (!localStorage.getItem('agro_seed')) {
+      store.posts.push(
+        { id: uid(), author: 'Grace (Farmer)', category: 'crops', text: 'Planted maize today after first rains. Any tips on fertilizer timing for southern Ghana?', image: 'maize.png', created: now(), likes: 3, comments: [{id:uid(),author:'Dr. Adaeze',text:'Apply NPK at 2 and 6 weeks.',created:now()}] },
+        { id: uid(), author: 'Kofi (Poultry)', category: 'livestock', text: 'Broilers at 3 weeks. Seeing mild coughing – should I adjust ventilation?', image: 'broilers.png', created: now(), likes: 5, comments: [] },
+        { id: uid(), author: 'Ngozi (Retailer)', category: 'inputs', text: 'Fresh layer feed (18%) arriving Friday. DM for bulk orders in Enugu.', image: 'feed.png', created: now(), likes: 2, comments: [] },
+      );
+      store.listings.push(
+        { id: uid(), author: 'Grace (Farmer)', title: 'Maize – 5 tons', type: 'crops', price: 32000, image: 'maize_5_tons.png', desc: 'Harvest in 2 weeks. Clean and dried. Pickup only.', created: now() },
+        { id: uid(), author: 'Kofi (Poultry)', title: '300 Layers (live)', type: 'livestock', price: 15000, image: 'layers.png', desc: 'Healthy birds, 7 weeks old. Kumasi.', created: now() },
+        { id: uid(), author: 'Ngozi (Supplier)', title: 'Fish Pellet 18% – 50 bags', type: 'inputs', price: 21000, image: 'fish_pellet.png', desc: 'Discount for bulk orders. Delivery available.', created: now() },
+      );
+      store.campaigns.push(
+        { id: uid(), author: 'Tunde', title: 'Expand cassava farm to 4 acres', amount: 40000, raised: 12000, desc: 'Seeking funds for cuttings, herbicide and labor. ROI 12 months.', created: now() },
+        { id: uid(), author: 'Aisha', title: 'Fish ponds stocking project', amount: 60000, raised: 8000, desc: 'Tilapia fingerlings, feed, and pond lining. ROI 9 months.', created: now() }
+      );
+      localStorage.setItem('agro_seed', '1');
+      save();
+    }
+
+    // ----- Init -----
+    function init() {
+      document.getElementById('year').textContent = new Date().getFullYear();
+      updateUserUI();
+      renderFeed();
+      renderMarket();
+      renderExperts();
+      renderCampaigns();
+      renderCourses();
+    }
+    init();
+    //localStorage.clear();
+  </script>
 </body>
 </html>
